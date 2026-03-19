@@ -1,0 +1,11 @@
+<button class="btn btn-primary" (click)="crearProductos()">
+  Crear producto
+</button>
+
+<app-tabla
+  [columnas]="columnas"
+  [data]="misProductos"
+  [titulo]="titulo"
+  (onInformacion)="recibirInformacion($event)"
+  (onEliminar)="eliminar($event)"
+></app-tabla>
