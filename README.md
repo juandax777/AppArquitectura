@@ -11,6 +11,12 @@ Esta autenticación es apropiada para una demostración académica. Las credenci
 
 El archivo `vercel.json` permite que las rutas internas de Angular funcionen al desplegar el repositorio en Vercel.
 
+### Protección contra copias automáticas
+
+La aplicación solo arranca desde `app-arquitectura-pearl.vercel.app` y desde `localhost` para desarrollo. Una copia servida desde una IP como `127.0.0.1` muestra una advertencia y no inicia Angular.
+
+Esta medida detiene clones automáticos sencillos, pero no sustituye una autenticación en servidor: una persona con acceso al JavaScript puede eliminar la validación.
+
 * fgjfibjkfljbklgb
 jkfgldjgkfljgklf
 jgfjkglfjdkg
