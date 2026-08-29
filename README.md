@@ -1,5 +1,16 @@
 ## Proyecto de Clase
 
+### Acceso de demostración
+
+La autenticación funciona completamente en el navegador y no necesita una base de datos ni un servidor.
+
+- Correo: `demo@futuro.com`
+- Contraseña: `futuro2026`
+
+Esta autenticación es apropiada para una demostración académica. Las credenciales quedan incluidas en el código compilado y no deben usarse para proteger información real.
+
+El archivo `vercel.json` permite que las rutas internas de Angular funcionen al desplegar el repositorio en Vercel.
+
 * fgjfibjkfljbklgb
 jkfgldjgkfljgklf
 jgfjkglfjdkg

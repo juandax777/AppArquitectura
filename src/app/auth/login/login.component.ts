@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import {
   FormBuilder,
@@ -40,7 +39,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(3)]],
-      remember: ['', false],
+      remember: [false],
     });
   }
 
@@ -59,24 +58,19 @@ export class LoginComponent implements OnInit {
     };
 
     this.usuarioService.login(loginData).subscribe({
-      next: (resp: any) => {
-        if (resp && resp.usuario) {
-          console.log(resp);
-          const { nombre, email, telefono } = resp.usuario;
-
-          Swal.fire({
-            html: `Bienvenido ${nombre}`,
-          }).then(() => {
-            this.router.navigateByUrl(PATH.ACERCADE);
-          });
-        }
-      },
-      error: (error: any) => {
+      next: () => {
         Swal.fire({
-          html: ` ${error.error.msg}`,
+          title: '¡Bienvenido al futuro!',
+          icon: 'success',
+          confirmButtonText: 'Continuar',
+        }).then(() => this.router.navigateByUrl(PATH.HOME));
+      },
+      error: (error: unknown) => {
+        Swal.fire({
+          title: 'No pudimos iniciar sesión',
+          text: error instanceof Error ? error.message : 'Credenciales incorrectas',
           icon: 'warning',
         });
-        console.error(error.error.msg);
       },
     });
   }

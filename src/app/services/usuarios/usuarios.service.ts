@@ -2,13 +2,18 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { LoginInterface } from '../../core/interface/login.interface';
-import { Observable, catchError, map, of, tap } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { PATH } from '../../core/enum/path.enum';
 import { UsuarioModel } from '../../core/models/usuario.model';
 import { crearUsuarioInterface } from '../../core/interface/usuario.interface';
 
 const base_url = environment.base_url;
+const DEMO_USER = {
+  email: 'juan@mail.com',
+  password: 'juan123',
+};
+const DEMO_TOKEN = 'app-arquitectura-demo-session';
 @Injectable({
   providedIn: 'root',
 })
@@ -30,56 +35,38 @@ export class UsuariosService {
   }
 
   validateToken(): Observable<boolean> {
-    return this.httpClient
-      .get(`${base_url}/login`, {
-        headers: {
-          'x-token': this.token,
-        },
-      })
-      .pipe(
-        map((resp: any) => {
-          const {
-            _id,
-            nombre,
-            email,
-            tipoDocumento,
-            numeroDocumento,
-            rol,
-            createdAt,
-            numeroCelular,
-            peso,
-            fechaNacimiento,
-            password,
-          } = resp.usuario;
+    const isAuthenticated = this.token === DEMO_TOKEN;
 
-          this.usuario = new UsuarioModel(
-            _id,
-            nombre,
-            email,
-            tipoDocumento,
-            numeroDocumento,
-            rol,
-            createdAt,
-            numeroCelular,
-            peso,
-            fechaNacimiento,
-            password
-          );
-          localStorage.setItem('token', resp.token);
-          return true;
-        }),
-        catchError((error) => {
-          console.error(error);
-          return of(false);
-        })
-      );
+    if (isAuthenticated) {
+      this.setDemoUser();
+    }
+
+    return of(isAuthenticated);
   }
 
-  login(login: LoginInterface) {
-    return this.httpClient.post(`${base_url}/login`, login).pipe(
-      tap((resp: any) => {
-        localStorage.setItem('token', resp.token);
-      })
+  login(login: LoginInterface): Observable<{ usuario: UsuarioModel }> {
+    const credentialsAreValid =
+      login.email.trim().toLowerCase() === DEMO_USER.email &&
+      login.password === DEMO_USER.password;
+
+    if (!credentialsAreValid) {
+      return throwError(() => new Error('Correo o contraseña incorrectos'));
+    }
+
+    this.setDemoUser();
+    localStorage.setItem('token', DEMO_TOKEN);
+
+    return of({ usuario: this.usuario });
+  }
+
+  private setDemoUser(): void {
+    this.usuario = new UsuarioModel(
+      'demo-user',
+      'Usuario Demo',
+      DEMO_USER.email,
+      'CC',
+      '0000000000',
+      'ADMIN'
     );
   }
 

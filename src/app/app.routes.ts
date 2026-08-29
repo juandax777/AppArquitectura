@@ -1,4 +1,4 @@
-import { Routes, CanActivateFn } from '@angular/router';
+import { Routes } from '@angular/router';
 import { PATH } from './core/enum/path.enum';
 import { AcercaDeComponent } from './page/acerca-de/acerca-de.component';
 import { ArticuloComponent } from './page/articulo/articulo.component';
@@ -95,5 +95,9 @@ export const routes: Routes = [
         component: ContactoComponent,
       },
     ],
+  },
+  {
+    path: '**',
+    redirectTo: PATH.HOME,
   },
 ];
